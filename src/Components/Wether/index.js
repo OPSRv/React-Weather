@@ -4,7 +4,7 @@ import axios from "axios";
 import ReactDOM from "react-dom";
 
 class Weather extends React.Component {
-  API_URL = `https://api.openweathermap.org/data/2.5/weather?q=rivne&appid=c1fb2275690ca17e568dd7636b4f9511&lang=ua,uk&units=metric`;
+  API_URL = `https://api.openweathermap.org/data/2.5/weather?q=rivne&appid=c1fb2275690ca17e568dd7636b4f9511&lang=ua&units=metric`;
 
   constructor(props) {
     super(props);
