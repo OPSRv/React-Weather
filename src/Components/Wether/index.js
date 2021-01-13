@@ -7,8 +7,6 @@ class Weather extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.input = React.createRef();
     this.state = {
       weather: "",
       location: "Рівне",
@@ -17,17 +15,6 @@ class Weather extends React.Component {
       time: "",
       date: "",
     };
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.getWeather(this.state.location)
-  }
-
-  getCity = (event) => {
-    this.setState({
-      location: event.target.value,
-    });
   }
 
   async getWeather(location){
@@ -46,8 +33,19 @@ class Weather extends React.Component {
       console.log(firstRequest)
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.getWeather(this.state.location);
+  }
+
+  getCity = (event) => {
+    this.setState({
+      location: event.target.value,
+    });
+  }
+
    componentDidMount() {
-    this.getWeather(this.state.location)
+    this.getWeather(this.state.location);
   }
 
   render() {
