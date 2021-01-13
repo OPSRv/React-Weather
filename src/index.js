@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
@@ -8,11 +8,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <Fragment>
-        <Weather />
-      </Fragment>
+        <Weather city="Rivne"/>
     );
   }
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));
+

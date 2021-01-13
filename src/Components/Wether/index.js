@@ -1,95 +1,72 @@
-import React, { Fragment } from "react";
+import React from "react";
 import "./index.css";
 import axios from "axios";
-import ReactDOM from "react-dom";
+import Clock from "../Clock";
 
 class Weather extends React.Component {
-  API_URL = `https://api.openweathermap.org/data/2.5/weather?q=rivne&appid=c1fb2275690ca17e568dd7636b4f9511&lang=ua&units=metric`;
 
   constructor(props) {
     super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.input = React.createRef();
     this.state = {
-      items: [],
       weather: "",
-      location: "",
+      location: "Рівне",
+      coord: "",
       temp: "",
       time: "",
       date: "",
     };
   }
 
-  componentDidMount() {
-    axios
-      .get(this.API_URL)
+  handleSubmit(event) {
+    event.preventDefault();
+    this.getWeather(this.state.location)
+  }
+
+  getCity = (event) => {
+    this.setState({
+      location: event.target.value,
+    });
+  }
+
+  async getWeather(location){
+    const firstRequest = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=c1fb2275690ca17e568dd7636b4f9511&lang=ua&units=metric`)
       .then((res) => {
-        console.log(res.data);
+        console.log(res.data.name)
         this.setState({
           items: res.data,
           weather: res.data.weather[0].description,
-          location: res.data.name,
+          // location: res.data.name,
           temp: res.data.main.temp,
+          coord: res.data.coord
         });
       })
       .catch((err) => console.log(err.responceText));
+      console.log(firstRequest)
+  }
 
-    setInterval(() => {
-      var days = [
-        "Неділя",
-        "Понеділок",
-        "Вівторок",
-        "Середа",
-        "Четвер",
-        "П'ятниця",
-        "Субота",
-      ];
-      var months = [
-        "Січня",
-        "Лютого",
-        "Березеня",
-        "Квітня",
-        "Травня",
-        "Червня",
-        "Липня",
-        "Серпня",
-        "Вересеня",
-        "Жовтня",
-        "Листопада",
-        "Грудня",
-      ];
-
-      const myDate = new Date();
-      const fullDate =
-        days[myDate.getDay()] +
-        ", " +
-        myDate.getDate() +
-        " " +
-        months[myDate.getMonth()] +
-        " " +
-        myDate.getFullYear() +
-        " року";
-
-      this.setState({
-        time: new Date().toLocaleTimeString(),
-        date: fullDate,
-      });
-    }, 1000);
+   componentDidMount() {
+    this.getWeather(this.state.location)
   }
 
   render() {
-    // console.log("STATE", this.state);
-
-    const { items, location, weather, temp, time, date } = this.state;
-    // console.log("ITEMS", items);
-
+    const { location, weather, temp } = this.state;
     return (
       <div className="container-fluid px-1 px-md-4 py-5 mx-auto">
         <div className="row d-flex justify-content-center px-3">
           <div className="card">
-            <h2 className="ml-auto mr-4 mt-3 mb-0">{ location }</h2>
-            <p className="ml-auto mr-4 mb-0 med-font">{ weather }</p>
-            <h1 className="ml-auto mr-4 large-font">{ temp }&#176;</h1>
-            <p className="time-font mb-0 ml-4 mt-auto">{ time }</p>
-            <p className="ml-4 mb-4">{date}</p>
+            <form onSubmit={this.handleSubmit}>
+              <div className="group ml-auto mr-4 mt-3 mb-0">
+                <input type="text" onChange={this.getCity} required />
+                <span className="bar" />
+                <label>Введіть місто</label>
+              </div>
+            </form>
+            <h2 className="ml-auto mr-4 mt-3 mb-0">{location}</h2>
+            <p className="ml-auto mr-4 mb-0 med-font">{weather}</p>
+            <h1 className="ml-auto mr-4 large-font">{temp}&#176;</h1>
+            <Clock />
           </div>
         </div>
       </div>
